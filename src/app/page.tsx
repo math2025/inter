@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PdfViewer from "../components/PdfViewer";
+import { FiChevronDown, FiChevronUp, FiFileText } from "react-icons/fi";
 
 const sections = [
   {
@@ -32,68 +33,142 @@ const sections = [
 
 export default function Home() {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
- return (
-  <div className="min-h-screen bg-white px-6 sm:px-12 py-10 text-gray-800 font-sans">
-    {/* Header / Intro */}
-    <div className="max-w-4xl mx-auto text-center mb-12">
-      <h1 className="text-4xl font-bold mb-4">Internship Documentation</h1>
-      <p className="text-gray-600 text-lg">
-        This document outlines the work completed during my 2-month internship,
-        covering technical designs, project inputs, and categorized project data.
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    sections.forEach((section) => {
+      const el = document.getElementById(section.id);
+      if (el) observer.observe(el);
+    });
+
+    observerRef.current = observer;
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#deeaff] px-6 py-12 text-gray-800 font-sans transition-colors duration-300 flex flex-col items-center">
+  {/* Section Divider */}
+      <div className="w-24 h-2 bg-sky-500 rounded-full mx-auto mb-6"></div>
+
+      {/* Header */}
+      <div className="max-w-4xl mx-auto text-center mb-16">
+        <h1 className=" mb-4 ml-10">
+          Internship Documentation
+        </h1> 
+         <p className="text-gray-700 text-lg max-w-2xl mx-auto">
+          This document outlines the work completed during my 2-month
+          internship, covering technical designs, project inputs, and
+          categorized project data.
+        </p>
+        {/* <h1 className="ml-10">
+          Internship Documentation
+        </h1> */}
+      </div>
+
+      {/* Contents List */}
+{/* Contents List */}
+<div className="flex justify-center items-center my-8">
+  <div className="flex flex-col items-center gap-3 text-blue-600 font-medium text-lg">
+    {sections.map((sec) => (
+      <p>
+      <a
+        key={sec.id}
+        href={`#${sec.id}`}
+        className={`transition hover:text-blue-800 text-center ${
+          activeSection === sec.id ? "underline font-bold" : ""
+        }`}
+      >
+        {sec.title}
+      </a>
       </p>
-    </div>
-
-    {/* Contents List */}
-    <div className="text-center mb-12">
-      <h2 className="text-2xl font-semibold mb-4">CONTENTS</h2>
-      <ul className="inline-block text-left space-y-2">
-        {sections.map((sec) => (
-          <li key={sec.id}>
-            <a
-              href={`#${sec.id}`}
-              className="text-blue-600 hover:underline font-medium"
-            >
-              {sec.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-    {/* Sections */}
-    <div className="max-w-4xl mx-auto space-y-10">
-      {sections.map((section) => (
-        <div
-          key={section.id}
-          id={section.id}
-          className="scroll-mt-20 border-b pb-6"
-        >
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold">{section.title}</h3>
-            <button
-              onClick={() =>
-                setExpanded(expanded === section.id ? null : section.id)
-              }
-              className="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
-            >
-              {expanded === section.id ? "− Hide" : "+ View PDF"}
-            </button>
-          </div>
-
-          <ul className="list-disc ml-6 mt-2 space-y-1 text-sm">
-            {section.items.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
-
-          {expanded === section.id && (
-            <div className="mt-4">
-              <PdfViewer fileUrl={section.pdfUrl} />
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    ))}
   </div>
-);
+</div>
+
+
+
+      {/* Sections and Subsections */}
+      <div className="max-w-6xl mx-auto space-y-20">
+        {sections.map((section) => (
+          <div
+            key={section.id}
+            id={section.id}
+            className="scroll-mt-20 fade-in"
+          >
+            <h3 className="text-3xl font-bold text-center mb-10 text-blue-900 underline underline-offset-8">
+              {section.title}
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 text-center">
+              {section.items.map((item, idx) => {
+                const itemKey = `${section.id}-${idx}`;
+                const isOpen = expanded === itemKey;
+
+                return (
+                  <div className="card-container">
+                  <div
+                    key={itemKey}
+                    className="card p-6 text-center hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <FiFileText size={24} className="text-blue-500" />
+                      <h4 className="text-lg font-semibold text-gray-700">
+                        {item}
+                      </h4>
+                      {/* <button
+                        onClick={() => setExpanded(isOpen ? null : itemKey)}
+  className={`btn-primary text-sm flex items-center gap-1 transition-transform duration-300 ${
+    isOpen ? "transform rotate-180" : ""
+  }`}
+                       >
+  {isOpen ? <FiChevronUp /> : <FiChevronDown />}
+  {isOpen ? "Hide PDF" : "View PDF"}
+</button> */}
+<button
+  onClick={() => setExpanded(isOpen ? null : itemKey)}
+  className={`my-button text-sm flex items-center gap-1 transition-transform duration-300 ${
+    isOpen ? "rotate-180" : ""
+  }`}
+>
+  {isOpen ? <FiChevronUp /> : <FiChevronDown />}
+  {isOpen ? "Hide PDF" : "View PDF"}
+</button>
+
+                    </div>
+                    </div>
+
+                   {isOpen && (
+  <div
+    className="mt-4 animate-fade-in border rounded overflow-hidden shadow-inner"
+    style={{
+      maxHeight: "600px",
+      opacity: isOpen ? 1 : 0,
+      transform: isOpen ? "translateY(0)" : "translateY(20px)",
+      transition: "opacity 0.5s ease, transform 0.5s ease",
+    }}
+  >
+    <PdfViewer fileUrl={section.pdfUrl} />
+  </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
