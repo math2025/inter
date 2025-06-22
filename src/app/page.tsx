@@ -82,9 +82,8 @@ export default function Home() {
 <div className="flex justify-center items-center my-8">
   <div className="flex flex-col items-center gap-3 text-blue-600 font-medium text-lg">
     {sections.map((sec) => (
-      <p>
+      <p key={sec.id}>
       <a
-        key={sec.id}
         href={`#${sec.id}`}
         className={`transition hover:text-blue-800 text-center ${
           activeSection === sec.id ? "underline font-bold" : ""
@@ -113,58 +112,47 @@ export default function Home() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 text-center">
               {section.items.map((item, idx) => {
-                const itemKey = `${section.id}-${idx}`;
-                const isOpen = expanded === itemKey;
+  const itemKey = `${section.id}-${idx}`;
+  const isOpen = expanded === itemKey;
 
-                return (
-                  <div className="card-container">
-                  <div
-                    key={itemKey}
-                    className="card p-6 text-center hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <div className="flex flex-col items-center gap-2">
-                      <FiFileText size={24} className="text-blue-500" />
-                      <h4 className="text-lg font-semibold text-gray-700">
-                        {item}
-                      </h4>
-                      {/* <button
-                        onClick={() => setExpanded(isOpen ? null : itemKey)}
-  className={`btn-primary text-sm flex items-center gap-1 transition-transform duration-300 ${
-    isOpen ? "transform rotate-180" : ""
-  }`}
-                       >
-  {isOpen ? <FiChevronUp /> : <FiChevronDown />}
-  {isOpen ? "Hide PDF" : "View PDF"}
-</button> */}
-<button
-  onClick={() => setExpanded(isOpen ? null : itemKey)}
-  className={`my-button text-sm flex items-center gap-1 transition-transform duration-300 ${
-    isOpen ? "rotate-180" : ""
-  }`}
->
-  {isOpen ? <FiChevronUp /> : <FiChevronDown />}
-  {isOpen ? "Hide PDF" : "View PDF"}
-</button>
+  return (
+    <div key={itemKey} className="card-container"> {/* ✅ key moved here */}
+      <div className="card p-6 text-center hover:shadow-xl transition-shadow duration-300">
+        <div className="flex flex-col items-center gap-2">
+          <FiFileText size={24} className="text-blue-500" />
+          <h4 className="text-lg font-semibold text-gray-700">
+            {item}
+          </h4>
+          
+          <button
+            onClick={() => setExpanded(isOpen ? null : itemKey)}
+            className={`my-button text-sm flex items-center gap-1 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          >
+            {isOpen ? <FiChevronUp /> : <FiChevronDown />}
+            {isOpen ? "Hide PDF" : "View PDF"}
+          </button>
+        </div>
+      </div>
 
-                    </div>
-                    </div>
+      {isOpen && (
+        <div
+          className="mt-4 animate-fade-in border rounded overflow-hidden shadow-inner"
+          style={{
+            maxHeight: "600px",
+            opacity: isOpen ? 1 : 0,
+            transform: isOpen ? "translateY(0)" : "translateY(20px)",
+            transition: "opacity 0.5s ease, transform 0.5s ease",
+          }}
+        >
+          <PdfViewer fileUrl={section.pdfUrl} />
+        </div>
+      )}
+    </div>
+  );
+})}
 
-                   {isOpen && (
-  <div
-    className="mt-4 animate-fade-in border rounded overflow-hidden shadow-inner"
-    style={{
-      maxHeight: "600px",
-      opacity: isOpen ? 1 : 0,
-      transform: isOpen ? "translateY(0)" : "translateY(20px)",
-      transition: "opacity 0.5s ease, transform 0.5s ease",
-    }}
-  >
-    <PdfViewer fileUrl={section.pdfUrl} />
-  </div>
-                    )}
-                  </div>
-                );
-              })}
             </div>
           </div>
         ))}
