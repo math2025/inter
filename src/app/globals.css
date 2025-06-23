@@ -20,11 +20,15 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4,p {
+h1, h2, h3, h4,p,ul,li {
   font-weight: 600;
   color: #2a2a2a;
   text-align: center;
 }
+ul li button {
+  margin-top: 0.25rem;
+}
+
 h1 {
   font-size: 2.5rem;
   text-align: center;
@@ -49,29 +53,95 @@ a:hover, button:hover {
   transform: scale(1.02);
 }
 
+/* Fix for center-aligning <li> items with bullets */
+.centered-list {
+  list-style-position: inside;
+  padding-left: 0; /* remove indent */
+  text-align: center;
+}
+
+/* Custom styling for sub-content nav list */
+.custom-sub-list {
+  margin-left: 1.25rem; /* same as ml-4 */
+  margin-top: 0.25rem;  /* same as mt-1 */
+  list-style-type: disc;
+  font-size: 0.875rem; /* same as text-sm */
+  color: #1e40af; /* text-blue-700 */
+  font-weight: 400; /* normal */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  list-style-position: inside;
+  padding-left: 0; /* remove indent */
+  text-align: center;
+}
+
+.custom-sub-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  text-align: left;
+}
+
+.custom-sub-button:hover {
+  color: #1e3a8a; /* hover:text-blue-900 */
+  text-decoration: underline;
+}
+/* Top-level section title */
+.custom-section-title {
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+/* Base style for the button */
+.custom-section-button {
+  font-size: 1.125rem; /* roughly text-lg */
+  font-weight: 500;
+  color: #2563eb; /* blue-600 */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  text-align: center;
+}
+
+/* Hover state */
+.custom-section-button:hover {
+  color: #1e40af; /* blue-800 */
+}
+
+/* Active (highlighted) section */
+.active-section {
+  text-decoration: underline;
+  font-weight: 700;
+  color: #e2e5ef; /* blue-900 */
+}
+
 .card-container {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 80px; /* adds space on the left */
-
-
-  /* height: 100vh; Full viewport height */
+  padding-left: 80px;
 }
 
-/* Fancy Cards / Sections */
 .card {
-  background: #ffffff;
-  border: 1px solid #d6e4f0;
+  background: #bbc6f5;
+  border: 1px solid #002a4e;
   border-radius: 16px;
   box-shadow: 0 10px 20px rgba(118, 199, 240, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-   height: 150px; /* Set the desired height */
-  width: 650px;  /* Set the desired width */
+  height: 150px;
+  width: 650px;
 }
 
 .card:hover {
   transform: translateY(-4px);
+   background: #5b68f7;
   box-shadow: 0 12px 24px rgba(118, 199, 240, 0.25);
 }
 
@@ -83,6 +153,18 @@ a:hover, button:hover {
   margin: 1rem auto;
   border-radius: 999px;
 }
+
+.my-line {
+  border: none;
+  border-top: 4px dashed #020202; /* Bright cyan-blue */
+  margin: 1rem 0;
+}
+.doc-icon {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
 
 /* Futuristic buttons */
 .btn-primary {
@@ -130,6 +212,21 @@ a:hover, button:hover {
 .pdf-viewer-container.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+.custom-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.custom-image {
+  width: 450px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes fadeIn {
