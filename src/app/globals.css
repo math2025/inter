@@ -119,7 +119,7 @@ a:hover, button:hover {
 .active-section {
   text-decoration: underline;
   font-weight: 700;
-  color: #e2e5ef; /* blue-900 */
+  /* color: #e2e5ef; blue-900 */
 }
 
 .card-container {

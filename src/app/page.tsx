@@ -523,50 +523,119 @@ export default function Home() {
         />
       </div>
 
-      {/* CONTENTS NAVIGATION */}
-      <div className="flex justify-center items-center my-8">
-        <div className="flex flex-col items-start gap-4 text-blue-600 font-medium text-lg">
-          {sections.map((sec) => {
-            const isOpen = expandedSection === sec.id;
 
-            return (
-              <div key={sec.id}>
-                {/* Main Section Title with Toggle */}
-                <p className="custom-section-title">
+{/* CONTENTS NAVIGATION */}
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center', 
+  margin: '2rem 0' 
+}}>
+  <div style={{ 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'flex-start', 
+    gap: '1rem', 
+    color: '#2563eb !important', 
+    fontWeight: '500', 
+    fontSize: '1.125rem' 
+  }}>
+    {sections.map((sec) => {
+      const isOpen = expandedSection === sec.id;
+
+      return (
+        <div key={sec.id}>
+          {/* Main Section Title with Toggle */}
+          <p style={{ 
+            marginBottom: '0.25rem', 
+            textAlign: 'center', 
+            color: '#2563eb !important' 
+          }}>
+            <button
+              onClick={() =>
+                setExpandedSection((prev) =>
+                  prev === sec.id ? null : sec.id
+                )
+              }
+              style={{
+                fontSize: '1.125rem',
+                fontWeight: activeSection === sec.id ? '700' : '500',
+                color: `${activeSection === sec.id ? '#e2e5ef' : '#2563eb'} !important`,
+                background: 'none',
+                border: 'none',
+                padding: '0',
+                cursor: 'pointer',
+                transition: 'color 0.2s ease, transform 0.2s ease',
+                textAlign: 'center',
+                textDecoration: activeSection === sec.id ? 'underline' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLElement;
+                target.style.setProperty('color', '#1e40af', 'important');
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLElement;
+                const color = activeSection === sec.id ? '#e2e5ef' : '#2563eb';
+                target.style.setProperty('color', color, 'important');
+              }}
+            >
+              {isOpen ? "▼" : "►"} {sec.title}
+            </button>
+          </p>
+
+          {/* Sub-items only if expanded */}
+          {isOpen && (
+            <ul style={{ 
+              marginLeft: '1.25rem',
+              marginTop: '0.25rem',
+              listStyleType: 'disc',
+              fontSize: '0.875rem',
+              color: '#1e40af !important',
+              fontWeight: '400 !important',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.25rem',
+              listStylePosition: 'inside',
+              paddingLeft: '0',
+              textAlign: 'center'
+            }}>
+              {sec.items.map((item, idx) => (
+                <li key={idx} style={{ color: '#1e40af !important' }}>
                   <button
-                    onClick={() =>
-                      setExpandedSection((prev) =>
-                        prev === sec.id ? null : sec.id
-                      )
-                    }
-                    className={`custom-section-button ${
-                      activeSection === sec.id ? "active-section" : ""
-                    }`}
+                    onClick={() => handleNavClick(sec.id, idx)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '0',
+                      font: 'inherit',
+                      color: '#1e40af !important',
+                      cursor: 'pointer',
+                      transition: 'color 0.2s ease-in-out',
+                      textAlign: 'left',
+                      marginTop: '0.25rem'
+                    }}
+                    onMouseEnter={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.setProperty('color', '#1e3a8a', 'important');
+                      target.style.textDecoration = 'underline';
+                    }}
+                    onMouseLeave={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.setProperty('color', '#1e40af', 'important');
+                      target.style.textDecoration = 'none';
+                    }}
                   >
-                    {isOpen ? "▼" : "►"} {sec.title}
+                    {item.label}
                   </button>
-                </p>
-
-                {/* Sub-items only if expanded */}
-                {isOpen && (
-                  <ul className="custom-sub-list">
-                    {sec.items.map((item, idx) => (
-                      <li key={idx}>
-                        <button
-                          onClick={() => handleNavClick(sec.id, idx)}
-                          className="custom-sub-button"
-                        >
-                          {item.label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </div>
+      );
+    })}
+  </div>
+</div>
 
       {/* <hr className="my-line" /> */}
       <hr></hr>
