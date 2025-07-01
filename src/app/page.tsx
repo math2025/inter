@@ -567,17 +567,17 @@ export default function Home() {
                 cursor: 'pointer',
                 transition: 'color 0.2s ease, transform 0.2s ease',
                 textAlign: 'center',
-                textDecoration: activeSection === sec.id ? 'underline' : 'none'
+                textDecoration:  'underline' // underline the section title
               }}
-              onMouseEnter={(e) => {
-                const target = e.target as HTMLElement;
-                target.style.setProperty('color', '#1e40af', 'important');
-              }}
-              onMouseLeave={(e) => {
-                const target = e.target as HTMLElement;
-                const color = activeSection === sec.id ? '#e2e5ef' : '#2563eb';
-                target.style.setProperty('color', color, 'important');
-              }}
+              // onMouseEnter={(e) => {
+              //   const target = e.target as HTMLElement;
+              //   target.style.setProperty('color', '#1e40af', 'important');
+              // }}
+              // onMouseLeave={(e) => {
+              //   const target = e.target as HTMLElement;
+              //   const color = activeSection === sec.id ? '#e2e5ef' : '#2563eb';
+              //   target.style.setProperty('color', color, 'important');
+              // }}
             >
               {isOpen ? "▼" : "►"} {sec.title}
             </button>
